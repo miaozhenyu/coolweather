@@ -1,5 +1,6 @@
 package com.mzy.mzy.coolweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.mzy.mzy.coolweather.gson.Forecast;
 import com.mzy.mzy.coolweather.gson.Weather;
+import com.mzy.mzy.coolweather.service.AutoUpdateService;
 import com.mzy.mzy.coolweather.util.HttpUtil;
 import com.mzy.mzy.coolweather.util.Utility;
 
@@ -148,6 +151,10 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
     private void showWeatherInfo(Weather weather) {
+        //启动服务 8小时更新一次
+//        Intent intent = new Intent(this, AutoUpdateService.class);
+//        startService(intent);
+
         String cityName = weather.basic.cityName;
         String updateTime = weather.basic.update.updateTime.split(" ")[1];
         String degree = weather.now.temperature+"℃";
@@ -166,7 +173,7 @@ public class WeatherActivity extends AppCompatActivity {
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
             maxText.setText(forecast.temperature.max);
-            maxText.setText(forecast.temperature.min);
+            minText.setText(forecast.temperature.min);
             forecastLayout.addView(view);
         }
         if(weather.aqi!=null){
@@ -180,6 +187,8 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
     private void loadBingPic() {
         String requestBingPic = "http://guolin.tech/api/bing_pic";
