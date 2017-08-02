@@ -152,8 +152,8 @@ public class WeatherActivity extends AppCompatActivity {
 
     private void showWeatherInfo(Weather weather) {
         //启动服务 8小时更新一次
-//        Intent intent = new Intent(this, AutoUpdateService.class);
-//        startService(intent);
+        Intent intent1 = new Intent(this, AutoUpdateService.class);
+        startService(intent1);
 
         String cityName = weather.basic.cityName;
         String updateTime = weather.basic.update.updateTime.split(" ")[1];
